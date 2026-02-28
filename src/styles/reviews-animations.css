@@ -1,0 +1,103 @@
+/* ================================================================
+   PART 19: Reviews Section Animations
+   ================================================================ */
+
+/* ===== SCROLL REVEAL ===== */
+.rev-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.rev-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== IMAGE CLIP REVEAL ===== */
+.rev-image-clip {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.visible .rev-image-clip {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Image slow zoom */
+.rev-image-zoom {
+  transform: scale(1.1);
+  transition: transform 8s ease-out;
+}
+.visible .rev-image-zoom {
+  transform: scale(1);
+}
+
+/* ===== GOLD FRAME SLIDE IN ===== */
+.rev-frame {
+  opacity: 0;
+  transform: translate(20px, -20px);
+  transition: opacity 0.8s ease-out 0.6s, transform 0.8s ease-out 0.6s;
+}
+.visible .rev-frame {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* ===== QUOTE MARK FLOAT ===== */
+@keyframes quote-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+.rev-quote-mark {
+  animation: quote-float 4s ease-in-out infinite;
+}
+
+/* ===== NAV BUTTON RIPPLE ===== */
+.rev-nav-btn {
+  position: relative;
+  overflow: hidden;
+}
+.rev-nav-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle,
+    rgba(197, 165, 114, 0.3) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  border-radius: 50%;
+}
+.rev-nav-btn:active::after {
+  opacity: 1;
+  transform: scale(1.5);
+}
+
+/* ===== NAME BAR GROW ===== */
+@keyframes rev-bar-grow {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 2rem;
+  }
+}
+
+/* ===== DECORATIVE STAR SPIN ===== */
+@keyframes rev-star-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.rev-star {
+  animation: rev-star-spin 20s linear infinite;
+}

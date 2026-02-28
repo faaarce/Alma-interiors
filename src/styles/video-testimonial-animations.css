@@ -1,0 +1,147 @@
+/* ================================================================
+   PART 20: Video Testimonial Section Animations
+   ================================================================ */
+
+/* ===== SCROLL REVEAL ===== */
+.vt-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.vt-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Label tracking */
+.vt-label {
+  letter-spacing: 0.4em;
+  transition: letter-spacing 1.2s ease-out 0.2s;
+}
+.visible .vt-label {
+  letter-spacing: 0.15em;
+}
+
+/* Heading clip reveal */
+.vt-heading {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1) 0.3s;
+}
+.visible .vt-heading {
+  clip-path: inset(0 0% 0 0);
+}
+
+/* Decorative line grow */
+.vt-line {
+  transition: width 0.8s ease-out 0.8s;
+}
+.visible .vt-line {
+  width: 60%;
+}
+
+/* ===== VIDEO CARD REVEAL ===== */
+.vt-video-card {
+  opacity: 0;
+  transform: translateY(50px) scale(0.98);
+  transition: opacity 0.8s ease-out 0.3s, transform 0.8s ease-out 0.3s;
+}
+.vt-video-card.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ===== THUMBNAIL ZOOM ===== */
+.vt-thumb-zoom {
+  transform: scale(1.05);
+  transition: transform 8s ease-out;
+}
+.vt-video-card.visible .vt-thumb-zoom {
+  transform: scale(1);
+}
+.vt-thumbnail:hover .vt-thumb-zoom {
+  transform: scale(1.08) !important;
+  transition: transform 0.7s ease !important;
+}
+
+/* ===== PLAY BUTTON ===== */
+@keyframes vt-play-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.vt-play-btn {
+  animation: vt-play-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.8s both;
+}
+
+/* Pulse rings */
+@keyframes vt-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+.vt-pulse-ring {
+  animation: vt-pulse 2s ease-out infinite;
+}
+
+/* ===== CORNER ACCENTS ===== */
+.vt-corner {
+  opacity: 0;
+  transition: opacity 0.6s ease-out 0.6s;
+}
+.vt-video-card.visible .vt-corner {
+  opacity: 1;
+}
+
+@keyframes vt-corner-h {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+@keyframes vt-corner-v {
+  0% { transform: scaleY(0); }
+  100% { transform: scaleY(1); }
+}
+
+.vt-corner-tl div:first-child {
+  transform-origin: left;
+  animation: vt-corner-h 0.6s ease-out 1s both;
+}
+.vt-corner-tl div:last-child {
+  transform-origin: top;
+  animation: vt-corner-v 0.6s ease-out 1.1s both;
+}
+.vt-corner-br div:first-child {
+  transform-origin: right;
+  animation: vt-corner-h 0.6s ease-out 1s both;
+}
+.vt-corner-br div:last-child {
+  transform-origin: bottom;
+  animation: vt-corner-v 0.6s ease-out 1.1s both;
+}
+
+/* ===== FLOATING SHAPES ===== */
+@keyframes vt-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-15px, 20px) scale(1.05); }
+  66% { transform: translate(10px, -15px) scale(0.95); }
+}
+@keyframes vt-drift-reverse {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(20px, -15px) scale(0.95); }
+  66% { transform: translate(-10px, 10px) scale(1.05); }
+}
+.vt-float {
+  animation: vt-drift 16s ease-in-out infinite;
+}
+.vt-float-reverse {
+  animation: vt-drift-reverse 12s ease-in-out infinite;
+}

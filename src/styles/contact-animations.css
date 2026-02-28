@@ -1,0 +1,107 @@
+/* ================================================================
+   PART 21: Contact + Footer Animations
+   ================================================================ */
+
+/* ===== FADE UP REVEAL ===== */
+.cta-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.cta-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== HEADING LETTER-SPACING ===== */
+.cta-heading {
+  letter-spacing: 0.05em;
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out, letter-spacing 1.2s ease-out;
+}
+.cta-heading.visible {
+  letter-spacing: -0.02em;
+}
+
+/* ===== BUTTON GLOW ===== */
+@keyframes cta-btn-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+  }
+  50% {
+    box-shadow: 0 0 30px 8px rgba(212, 175, 55, 0.2);
+  }
+}
+.cta-btn.visible {
+  animation: cta-btn-glow 2s ease-in-out 1s 1;
+}
+
+/* Arrow hover */
+.cta-arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+.cta-btn:hover .cta-arrow {
+  transform: translate(3px, -3px);
+}
+
+/* ===== LINK HOVER — SLIDE WITH DASH ===== */
+.cta-link {
+  position: relative;
+  padding-left: 0;
+  transition: padding-left 0.3s ease, color 0.3s ease;
+}
+.cta-link::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 1px;
+  background: #c5a572;
+  transition: width 0.3s ease;
+  transform: translateY(-50%);
+}
+.cta-link:hover {
+  padding-left: 20px;
+}
+.cta-link:hover::before {
+  width: 14px;
+}
+
+/* ===== SOCIAL ICON SCALE + GLOW ===== */
+.cta-social svg {
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.cta-social:hover svg {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 6px rgba(197, 165, 114, 0.4));
+}
+
+/* ===== LOGO SPIN ON REVEAL ===== */
+@keyframes cta-logo-spin {
+  0% {
+    transform: rotate(0deg) scale(0.5);
+  }
+  60% {
+    transform: rotate(380deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+.cta-logo-spin {
+  transition: transform 0.8s ease-out;
+}
+.visible .cta-logo-spin {
+  animation: cta-logo-spin 0.8s ease-out 0.3s 1;
+}
+
+/* ===== DIVIDER GROW ===== */
+.cta-divider {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1s ease-out;
+}
+.cta-divider.visible {
+  transform: scaleX(1);
+}

@@ -1,0 +1,390 @@
+/* ================================================================
+   ALMA INTERIOR — Header & Hero Animations
+   Import this file in your global CSS or layout component.
+   Works with Tailwind CSS v3/v4.
+   ================================================================ */
+
+/* ===================================================
+   HEADER ANIMATIONS
+   =================================================== */
+
+/* Entrance: slide down from top */
+@keyframes hdr-slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-hdr-slide-down {
+  animation: hdr-slide-down 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Staggered children fade-in */
+@keyframes hdr-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-hdr-fade-in {
+  opacity: 0;
+  animation: hdr-fade-in 0.6s ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+/* Dropdown scale-in */
+@keyframes hdr-dropdown-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+.animate-hdr-dropdown-in {
+  animation: hdr-dropdown-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Nav link hover underline */
+.hdr-nav-hover {
+  position: relative;
+}
+.hdr-nav-hover::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: #c5a572;
+  transition: width 0.3s ease, left 0.3s ease;
+  border-radius: 1px;
+}
+.hdr-nav-hover:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Dropdown link hover — sliding dash */
+.hdr-dropdown-link {
+  position: relative;
+  padding-left: 0;
+  transition: padding-left 0.3s ease, color 0.3s ease;
+}
+.hdr-dropdown-link .hdr-dropdown-line {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 1.5px;
+  background: #c5a572;
+  transition: width 0.3s ease;
+  transform: translateY(-50%);
+  display: block;
+}
+.hdr-dropdown-link:hover {
+  padding-left: 14px;
+}
+.hdr-dropdown-link:hover .hdr-dropdown-line {
+  width: 10px;
+}
+
+/* CTA shimmer sweep */
+@keyframes hdr-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+.hdr-cta-shimmer {
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: hdr-shimmer 3s ease-in-out infinite;
+}
+
+/* CTA ripple on click */
+.hdr-cta {
+  position: relative;
+}
+.hdr-cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.3) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.hdr-cta:active::after {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* ===================================================
+   HERO ANIMATIONS
+   =================================================== */
+
+/* Background slow zoom */
+@keyframes hero-bg-zoom {
+  0% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.animate-hero-bg-zoom {
+  animation: hero-bg-zoom 20s ease-out forwards;
+}
+
+/* Floating particles */
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translate(15px, -20px) scale(1.3);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-10px, -35px) scale(0.8);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate(20px, -15px) scale(1.1);
+    opacity: 0.6;
+  }
+}
+.animate-hero-float {
+  animation: hero-float 6s ease-in-out infinite;
+}
+
+/* Corner lines grow */
+@keyframes hero-line-grow-h {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+@keyframes hero-line-grow-v {
+  0% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+.animate-hero-line-h {
+  transform: scaleX(0);
+  animation: hero-line-grow-h 0.8s ease-out 1.2s forwards;
+}
+.animate-hero-line-v {
+  transform: scaleY(0);
+  animation: hero-line-grow-v 0.8s ease-out 1.4s forwards;
+}
+
+/* Spinning badge (20s full rotation) */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+/* Badge entrance: scale + rotate in */
+@keyframes hero-badge-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(-180deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+.animate-hero-badge-in {
+  opacity: 0;
+  animation: hero-badge-in 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+}
+
+/* Logo glow pulse */
+@keyframes hero-logo-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 rgba(212, 175, 55, 0));
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3));
+  }
+}
+.animate-hero-logo-glow {
+  animation: hero-logo-glow 3s ease-in-out infinite 1.5s;
+}
+
+/* Heading clip-path reveal */
+@keyframes hero-heading-reveal {
+  0% {
+    opacity: 0;
+    clip-path: inset(100% 0 0 0);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0% 0 0 0);
+  }
+}
+.animate-hero-heading-reveal {
+  opacity: 0;
+  clip-path: inset(100% 0 0 0);
+  animation: hero-heading-reveal 1s cubic-bezier(0.77, 0, 0.175, 1) 0.5s
+    forwards;
+}
+
+/* Divider grow */
+@keyframes hero-divider-grow {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 120px;
+  }
+}
+.animate-hero-divider-grow {
+  animation: hero-divider-grow 0.8s ease-out 1s forwards;
+}
+
+/* Subheading blur-in */
+@keyframes hero-sub-in {
+  0% {
+    opacity: 0;
+    transform: translateY(25px);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+.animate-hero-sub-in {
+  opacity: 0;
+  transform: translateY(25px);
+  filter: blur(8px);
+  animation: hero-sub-in 0.8s ease-out 0.8s forwards;
+}
+
+/* CTA button entrance + glow */
+@keyframes hero-cta-in {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes hero-cta-glow {
+  0%,
+  100% {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 40px 8px rgba(212, 175, 55, 0.25);
+  }
+}
+.animate-hero-cta-in {
+  opacity: 0;
+  animation: hero-cta-in 0.8s ease-out 1s forwards,
+    hero-cta-glow 2s ease-in-out 2s 1;
+}
+
+/* CTA shimmer */
+@keyframes hero-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+.hero-cta-shimmer {
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: hero-shimmer 3s ease-in-out 2.5s infinite;
+}
+
+/* CTA arrow hover */
+.hero-cta:hover svg {
+  transform: translateX(4px);
+}
+
+/* Scroll indicator entrance */
+@keyframes hero-scroll-in {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+.animate-hero-scroll-in {
+  opacity: 0;
+  animation: hero-scroll-in 0.6s ease-out 1.8s forwards;
+}
+
+/* Scroll line pulse */
+@keyframes hero-scroll-pulse {
+  0%,
+  100% {
+    transform: scaleY(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scaleY(1.5);
+    opacity: 1;
+  }
+}
+.animate-hero-scroll-pulse {
+  animation: hero-scroll-pulse 2s ease-in-out 2.2s infinite;
+}

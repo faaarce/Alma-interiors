@@ -1,0 +1,133 @@
+/* ================================================================
+   PART 18: Process Section Animations
+   ================================================================ */
+
+/* ===== HEADING REVEAL ===== */
+.proc-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.proc-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Label tracking */
+.proc-label {
+  letter-spacing: 0.4em;
+  transition: letter-spacing 1.2s ease-out 0.2s;
+}
+.visible .proc-label {
+  letter-spacing: 0.15em;
+}
+
+/* Heading clip reveal */
+.proc-heading {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1) 0.3s;
+}
+.visible .proc-heading {
+  clip-path: inset(0 0% 0 0);
+}
+
+/* Decorative line grow */
+.proc-line {
+  transition: width 0.8s ease-out 0.8s;
+}
+.visible .proc-line {
+  width: 80%;
+}
+
+/* ===== STEP CARD REVEAL ===== */
+.proc-step {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+.proc-step.visible {
+  opacity: 1;
+  transform: translateY(0);
+  position: relative;
+}
+
+/* Step hover lift */
+.proc-step.visible:hover {
+  transform: translateY(-6px);
+  transition: transform 0.3s ease;
+}
+
+/* Step left glow bar on hover */
+.proc-step::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: 0;
+  background: linear-gradient(to bottom, #c5a572, transparent);
+  transition: height 0.4s ease;
+}
+.proc-step:hover::before {
+  height: 100%;
+}
+
+/* ===== GHOST NUMBER ===== */
+.proc-number {
+  transform: translateX(-10px);
+  opacity: 0;
+  transition: transform 0.6s ease-out 0.2s, opacity 0.6s ease-out 0.2s;
+}
+.visible .proc-number {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Small number slide in */
+.proc-number-small {
+  transform: translateX(-20px);
+  opacity: 0;
+  transition: transform 0.5s ease-out 0.5s, opacity 0.5s ease-out 0.5s;
+}
+.visible .proc-number-small {
+  transform: translate(0, -50%);
+  opacity: 1;
+}
+
+/* ===== STEP DIVIDER LINE GROW ===== */
+.proc-step-line {
+  transition: width 0.6s ease-out 0.4s;
+}
+.visible .proc-step-line {
+  width: 100%;
+}
+
+/* ===== FLOATING CIRCLES ===== */
+@keyframes proc-drift {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(-20px, 15px) scale(1.05);
+  }
+  66% {
+    transform: translate(10px, -10px) scale(0.95);
+  }
+}
+@keyframes proc-drift-reverse {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(15px, -20px) scale(0.95);
+  }
+  66% {
+    transform: translate(-10px, 10px) scale(1.05);
+  }
+}
+.proc-float {
+  animation: proc-drift 15s ease-in-out infinite;
+}
+.proc-float-reverse {
+  animation: proc-drift-reverse 12s ease-in-out infinite;
+}

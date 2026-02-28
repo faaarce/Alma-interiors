@@ -1,0 +1,180 @@
+/* ================================================================
+   WORK PAGE — Animations
+   ================================================================ */
+
+/* ===== HERO ===== */
+.pp-hero-bg {
+  transform: scale(1.1);
+  animation: pp-bg-zoom 15s ease-out forwards;
+}
+@keyframes pp-bg-zoom {
+  0% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.pp-hero-heading {
+  opacity: 0;
+  clip-path: inset(100% 0 0 0);
+  animation: pp-heading-in 1s cubic-bezier(0.77, 0, 0.175, 1) 0.3s forwards;
+}
+@keyframes pp-heading-in {
+  0% { opacity: 0; clip-path: inset(100% 0 0 0); }
+  50% { opacity: 1; }
+  100% { opacity: 1; clip-path: inset(0% 0 0 0); }
+}
+
+.pp-hero-breadcrumb {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: pp-fade-up 0.6s ease-out 0.7s forwards;
+}
+
+.pp-hero-line {
+  animation: pp-line-grow 0.8s ease-out 1s forwards;
+}
+@keyframes pp-line-grow {
+  0% { width: 0; }
+  100% { width: 100px; }
+}
+
+.pp-line-h {
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: pp-scale-h 0.6s ease-out 1.2s forwards;
+}
+.pp-line-v {
+  transform: scaleY(0);
+  transform-origin: top;
+  animation: pp-scale-v 0.6s ease-out 1.4s forwards;
+}
+@keyframes pp-scale-h {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+@keyframes pp-scale-v {
+  0% { transform: scaleY(0); }
+  100% { transform: scaleY(1); }
+}
+@keyframes pp-fade-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== FILTER ===== */
+.pp-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.pp-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pp-filter-btn {
+  position: relative;
+  overflow: hidden;
+}
+.pp-filter-btn.active {
+  background: #3a3a3a !important;
+  color: white !important;
+  border-color: #3a3a3a !important;
+}
+
+/* ===== CARDS ===== */
+.pp-card {
+  opacity: 0;
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.pp-card[data-side="left"] {
+  transform: translateX(-50px) translateY(30px);
+}
+.pp-card[data-side="right"] {
+  transform: translateX(50px) translateY(30px);
+}
+.pp-card.visible {
+  opacity: 1;
+  transform: translateX(0) translateY(0);
+}
+.pp-card.visible:hover {
+  transform: translateY(-8px);
+  transition: transform 0.4s ease;
+}
+
+/* Filter hide/show */
+.pp-card.filtered-out {
+  opacity: 0 !important;
+  transform: scale(0.9) !important;
+  pointer-events: none;
+  position: absolute;
+  visibility: hidden;
+  height: 0;
+  margin: 0 !important;
+  overflow: hidden;
+}
+
+/* Image curtain */
+.pp-img-clip {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1) 0.15s;
+}
+.visible .pp-img-clip {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Ken Burns */
+.pp-img-zoom {
+  transform: scale(1.15);
+  transition: transform 6s ease-out;
+}
+.visible .pp-img-zoom {
+  transform: scale(1);
+}
+.group:hover .pp-img-zoom {
+  transform: scale(1.1) !important;
+  transition: transform 0.7s ease !important;
+}
+
+/* Badge spin */
+.pp-badge {
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.group:hover .pp-badge {
+  transform: rotate(0deg) !important;
+  opacity: 1;
+}
+
+/* Text */
+.pp-text {
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.6s ease-out 0.4s, transform 0.6s ease-out 0.4s;
+}
+.visible .pp-text {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Gold dot on hover */
+.group:hover .pp-dot {
+  width: 0.5rem;
+  margin-right: 0.75rem;
+}
+
+/* ===== FLOATING DECORATIONS ===== */
+.pp-float {
+  animation: pp-drift 18s ease-in-out infinite;
+}
+.pp-float-reverse {
+  animation: pp-drift-reverse 14s ease-in-out infinite;
+}
+@keyframes pp-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-20px, 15px) scale(1.05); }
+  66% { transform: translate(10px, -10px) scale(0.95); }
+}
+@keyframes pp-drift-reverse {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(15px, -20px) scale(0.95); }
+  66% { transform: translate(-10px, 10px) scale(1.05); }
+}

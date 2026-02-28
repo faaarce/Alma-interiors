@@ -1,0 +1,120 @@
+/* ================================================================
+   PART 17: Services Section Animations
+   ================================================================ */
+
+/* ===== BASE REVEAL ===== */
+.svc-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.svc-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== LABEL TRACKING ===== */
+.svc-label {
+  letter-spacing: 0.3em;
+  transition: letter-spacing 1s ease-out;
+}
+.visible .svc-label {
+  letter-spacing: 0.15em;
+}
+
+/* ===== HEADING CLIP REVEAL ===== */
+.svc-heading {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1) 0.2s;
+}
+.visible .svc-heading {
+  clip-path: inset(0 0% 0 0);
+}
+
+/* ===== BUTTON GLOW ===== */
+@keyframes svc-glow {
+  0%, 100% {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px 5px rgba(212, 175, 55, 0.25);
+  }
+}
+.svc-btn.visible {
+  animation: svc-glow 2s ease-in-out 0.8s 1;
+}
+
+/* Button arrow hover */
+.svc-arrow {
+  transition: transform 0.3s ease;
+}
+.svc-btn:hover .svc-arrow {
+  transform: translate(3px, -3px);
+}
+
+/* ===== CARD REVEAL ===== */
+.svc-card {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.svc-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Card hover lift */
+.svc-card.visible:hover {
+  transform: translateY(-8px);
+  transition: transform 0.4s ease;
+}
+
+/* ===== IMAGE CURTAIN REVEAL ===== */
+.svc-image-clip {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.visible .svc-image-clip {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Image slow zoom on reveal (Ken Burns) */
+.svc-image-zoom {
+  transform: scale(1.15);
+  transition: transform 6s ease-out;
+}
+.visible .svc-image-zoom {
+  transform: scale(1);
+}
+.group:hover .svc-image-zoom {
+  transform: scale(1.1) !important;
+  transition: transform 0.7s ease !important;
+}
+
+/* ===== TEXT FADE IN ===== */
+.svc-text {
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.6s ease-out 0.5s, transform 0.6s ease-out 0.5s;
+}
+.visible .svc-text {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Title line grow */
+.svc-title-line {
+  transition: width 0.6s ease-out 0.4s;
+}
+.visible .svc-title-line {
+  width: 2rem;
+}
+
+/* ===== BADGE ===== */
+.svc-badge {
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.group:hover .svc-badge {
+  transform: rotate(0deg) !important;
+  opacity: 1;
+}
