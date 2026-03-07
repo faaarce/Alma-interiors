@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback } from "react";
+import { Link } from "react-router-dom";
 
 /* ───────── Types ───────── */
 interface Project {
@@ -79,10 +80,11 @@ export default function Projects({
 }: ProjectsProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
-  const setupObserver = useCallback(() => {
+  const setupObservers = useCallback(() => {
     if (!sectionRef.current) return;
 
-    const observer = new IntersectionObserver(
+    /* ── Heading + CTA: immediate reveal ── */
+    const revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
@@ -90,20 +92,47 @@ export default function Projects({
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.15 }
     );
 
     sectionRef.current
-      .querySelectorAll(".prj-reveal, .prj-card, .prj-cta")
-      .forEach((el) => observer.observe(el));
+      .querySelectorAll(".prj-reveal, .prj-cta")
+      .forEach((el) => revealObserver.observe(el));
 
-    return observer;
+    /* ── Cards: staggered one-by-one ──
+       When a batch of cards enters the viewport at once,
+       we delay each by 150ms so they cascade in sequence.
+       Each card is unobserved after reveal (one-time animation). */
+    const cardObserver = new IntersectionObserver(
+      (entries) => {
+        const newlyVisible = entries
+          .filter((e) => e.isIntersecting)
+          .map((e) => e.target as HTMLElement);
+
+        newlyVisible.forEach((card, i) => {
+          setTimeout(() => {
+            card.classList.add("visible");
+          }, i * 150);
+          cardObserver.unobserve(card);
+        });
+      },
+      { threshold: 0.08 }
+    );
+
+    sectionRef.current
+      .querySelectorAll(".prj-card")
+      .forEach((el) => cardObserver.observe(el));
+
+    return { revealObserver, cardObserver };
   }, []);
 
   useEffect(() => {
-    const observer = setupObserver();
-    return () => observer?.disconnect();
-  }, [setupObserver]);
+    const obs = setupObservers();
+    return () => {
+      obs?.revealObserver.disconnect();
+      obs?.cardObserver.disconnect();
+    };
+  }, [setupObservers]);
 
   const leftProjects = projects.filter((_, i) => i % 2 === 0);
   const rightProjects = projects.filter((_, i) => i % 2 !== 0);
@@ -160,8 +189,11 @@ export default function Projects({
           </div>
         </div>
 
-        {/* CTA Button */}
-        <button className="prj-cta relative flex items-center space-x-2 overflow-hidden rounded-full bg-gradient-to-r from-[#D4AF37] to-[#C5A572] px-8 py-4 text-lg text-white shadow-xl transition-all duration-300 hover:scale-105 hover:from-[#C5A572] hover:to-[#D4AF37]">
+        {/* CTA Button → /work page */}
+        <Link
+          to="/work"
+          className="prj-cta relative inline-flex items-center space-x-2 overflow-hidden rounded-full bg-gradient-to-r from-[#D4AF37] to-[#C5A572] px-8 py-4 text-lg text-white shadow-xl transition-all duration-300 hover:scale-105 hover:from-[#C5A572] hover:to-[#D4AF37]"
+        >
           <span className="relative z-10">{ctaLabel}</span>
           <svg
             className="prj-cta-arrow relative z-10 h-5 w-5"
@@ -173,13 +205,13 @@ export default function Projects({
             <path d="M7 17L17 7M17 7H7M17 7V17" />
           </svg>
           <div className="prj-cta-shimmer absolute inset-0"></div>
-        </button>
+        </Link>
       </div>
     </section>
   );
 }
 
-/* ───────── ProjectCard sub-component ───────── */
+/* ───────── ProjectCard sub-component — Enhanced Design ───────── */
 interface ProjectCardProps {
   project: Project;
   index: number;
@@ -190,28 +222,38 @@ interface ProjectCardProps {
 function ProjectCard({ project, index, side, heightClass }: ProjectCardProps) {
   return (
     <div className="prj-card group cursor-pointer" data-side={side}>
+      {/* Image container */}
       <div
         className={`relative mb-6 overflow-hidden rounded-2xl bg-gray-100 ${heightClass}`}
       >
+        {/* Curtain reveal + Ken Burns */}
         <div className="prj-img-clip h-full w-full">
           <img
             src={project.image}
             alt={project.alt}
-            className="prj-img-zoom h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+            className="prj-img-zoom h-full w-full object-cover"
             loading="lazy"
           />
         </div>
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+        {/* Enhanced overlay — richer gradient */}
+        <div className="prj-overlay absolute inset-0"></div>
 
+        {/* Number badge (rotated → spins straight on hover) */}
         <div
-          className="prj-badge absolute top-4 left-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-sm font-bold text-white opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:opacity-100"
+          className="prj-badge absolute top-4 left-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 text-sm font-bold text-white opacity-0 backdrop-blur-sm"
           style={{ transform: "rotate(-90deg)" }}
         >
           {String(index).padStart(2, "0")}
         </div>
 
-        <div className="absolute right-4 bottom-4 flex h-10 w-10 translate-y-4 items-center justify-center rounded-full bg-[#C5A572] text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+        {/* Category tag — slides down on hover */}
+        <div className="prj-category-tag absolute top-4 right-4 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-medium text-white backdrop-blur-sm">
+          {project.category}
+        </div>
+
+        {/* Arrow button — slides up on hover */}
+        <div className="prj-arrow-btn absolute right-4 bottom-4 flex h-10 w-10 items-center justify-center rounded-full bg-[#C5A572] text-white shadow-lg">
           <svg
             className="h-4 w-4"
             viewBox="0 0 24 24"
@@ -224,6 +266,7 @@ function ProjectCard({ project, index, side, heightClass }: ProjectCardProps) {
         </div>
       </div>
 
+      {/* Text */}
       <div className="prj-text">
         <div className="flex items-start justify-between">
           <div>
@@ -231,7 +274,9 @@ function ProjectCard({ project, index, side, heightClass }: ProjectCardProps) {
               <span className="prj-dot mr-0 h-2 w-0 rounded-full bg-[#C5A572] transition-all duration-500" />
               {project.title}
             </h3>
-            <p className="text-[#6B6B6B]">{project.category}</p>
+            <p className="text-[#6B6B6B] transition-colors duration-300 group-hover:text-[#3A3A3A]">
+              {project.category}
+            </p>
           </div>
           <div className="text-[#C5A572] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
             <svg

@@ -1,3 +1,10 @@
 @import "tailwindcss";
 @import "./styles/alma-animations.css";
 @import "./styles/about-animations.css";
+@import "./styles/projects-animations.css";
+@import "./styles/services-animations.css";
+@import "./styles/process-animations.css";
+@import "./styles/reviews-animations.css";
+@import "./styles/video-testimonial-animations.css";
+@import "./styles/contact-animations.css";
+@import "./styles/work-page-animations.css";
