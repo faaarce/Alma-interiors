@@ -44,15 +44,28 @@ export default function BlogDetailPage() {
           {blog && !isLoading && (
             <article>
               {blog.thumbnail && <div className="mb-10 overflow-hidden rounded-2xl"><img src={blog.thumbnail} alt={blog.title} className="h-80 w-full object-cover" /></div>}
-              <div className="mb-6 flex items-center gap-4 text-sm text-[#6B6B6B]">
+
+              {/* Meta: author, date, tags, delete */}
+              <div className="mb-6 flex flex-wrap items-center gap-4 text-sm text-[#6B6B6B]">
                 <div className="flex items-center gap-2">
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#C5A572]/10 text-xs font-bold text-[#C5A572]">{blog.author?.charAt(0).toUpperCase()}</div>
                   <span className="font-semibold text-[#3A3A3A]">{blog.author}</span>
                 </div>
                 <span>•</span>
                 <span>{formatDate(blog.created)}</span>
+                {blog.tags && (
+                  <>
+                    <span>•</span>
+                    <div className="flex flex-wrap gap-2">
+                      {blog.tags.split(",").map((tag) => tag.trim()).filter(Boolean).map((tag) => (
+                        <span key={tag} className="rounded-full bg-[#C5A572]/10 px-3 py-0.5 text-xs font-medium text-[#C5A572]">{tag}</span>
+                      ))}
+                    </div>
+                  </>
+                )}
                 {isAuthenticated && <><span>•</span><button onClick={handleDelete} className="text-red-400 transition-colors hover:text-red-500">Hapus</button></>}
               </div>
+
               <h1 className="mb-4 font-serif text-4xl font-bold leading-tight text-[#3A3A3A] md:text-5xl">{blog.title}</h1>
               {blog.description && <p className="mb-8 text-xl leading-relaxed text-[#6B6B6B] italic">{blog.description}</p>}
               <div className="mb-8 h-[2px] w-16 bg-gradient-to-r from-[#C5A572] to-transparent" />

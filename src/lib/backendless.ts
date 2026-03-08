@@ -83,6 +83,7 @@ export interface BlogData {
   content: string;
   author: string;
   thumbnail?: string | null;
+  tags?: string | null;
   created?: number;
   updated?: number | null;
 }
@@ -98,8 +99,19 @@ export async function fetchBlogById(id: string): Promise<BlogData> {
 }
 
 /** Create blog (requires auth token) */
-export async function createBlog(blog: Pick<BlogData, "title" | "description" | "content" | "author">): Promise<BlogData> {
-  return authApi().post("data/Blogs", { json: blog }).json<BlogData>();
+export async function createBlog(
+  blog: Pick<BlogData, "title" | "description" | "content" | "author"> & { thumbnail?: string; tags?: string }
+): Promise<BlogData> {
+  // Strip empty optional fields so Backendless doesn't store ""
+  const payload: Record<string, string> = {
+    title: blog.title,
+    description: blog.description,
+    content: blog.content,
+    author: blog.author,
+  };
+  if (blog.thumbnail) payload.thumbnail = blog.thumbnail;
+  if (blog.tags) payload.tags = blog.tags;
+  return authApi().post("data/Blogs", { json: payload }).json<BlogData>();
 }
 
 /** Delete blog (requires auth token) */

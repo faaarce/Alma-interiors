@@ -9,6 +9,7 @@ interface HeaderProps { navLinks?: NavLink[]; dropdownLinks?: DropdownLink[][]; 
 
 const defaultNavLinks: NavLink[] = [
   { label: "Works", href: "/work" },
+  { label: "Teams", href: "/teams" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/#contact" },
 ];
@@ -16,7 +17,7 @@ const defaultNavLinks: NavLink[] = [
 const defaultDropdownLinks: DropdownLink[][] = [
   [{ label: "Homepage", href: "/" }, { label: "About", href: "/#about" }, { label: "Works", href: "/work" }],
   [{ label: "Services", href: "/#services" }, { label: "Process", href: "/#process" }, { label: "Reviews", href: "/#reviews" }],
-  [{ label: "Blog", href: "/blog" }, { label: "Contact", href: "/#contact" }],
+  [{ label: "Teams", href: "/teams" }, { label: "Blog", href: "/blog" }, { label: "Contact", href: "/#contact" }],
 ];
 
 export default function Header({ navLinks = defaultNavLinks, dropdownLinks = defaultDropdownLinks, ctaLabel = "Book", lightSections = ["about", "projects", "services", "reviews", "contact"] }: HeaderProps) {
@@ -38,11 +39,10 @@ export default function Header({ navLinks = defaultNavLinks, dropdownLinks = def
     if (!hash) return;
     e.preventDefault();
     if (location.pathname === targetPath) {
-      const el = document.getElementById(hash);
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      document.getElementById(hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
     } else {
       navigate(targetPath);
-      setTimeout(() => { const el = document.getElementById(hash); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }, 100);
+      setTimeout(() => document.getElementById(hash)?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
     }
   }, [location.pathname, navigate]);
 
@@ -69,7 +69,7 @@ export default function Header({ navLinks = defaultNavLinks, dropdownLinks = def
 
   useEffect(() => {
     const hash = location.hash.replace("#", "");
-    if (hash) setTimeout(() => { const el = document.getElementById(hash); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }, 300);
+    if (hash) setTimeout(() => document.getElementById(hash)?.scrollIntoView({ behavior: "smooth", block: "start" }), 300);
   }, [location]);
 
   const handleDropdownEnter = () => { if (dropdownTimeout.current) clearTimeout(dropdownTimeout.current); setDropdownOpen(true); };

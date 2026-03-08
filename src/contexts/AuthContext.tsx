@@ -17,23 +17,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function checkAuth() {
-      const storedUser = getStoredUser();
-      if (storedUser) { const valid = await validateToken(); if (valid) setUser(storedUser); }
+    async function check() {
+      const stored = getStoredUser();
+      if (stored) { const valid = await validateToken(); if (valid) setUser(stored); }
       setIsLoading(false);
     }
-    checkAuth();
+    check();
   }, []);
 
-  const login = useCallback(async (email: string, password: string) => { const u = await apiLogin(email, password); setUser(u); }, []);
-  const register = useCallback(async (name: string, email: string, password: string) => { await apiRegister(name, email, password); const u = await apiLogin(email, password); setUser(u); }, []);
+  const login = useCallback(async (email: string, password: string) => { setUser(await apiLogin(email, password)); }, []);
+  const register = useCallback(async (name: string, email: string, password: string) => { await apiRegister(name, email, password); setUser(await apiLogin(email, password)); }, []);
   const logout = useCallback(async () => { await apiLogout(); setUser(null); }, []);
 
-  return (
-    <AuthContext.Provider value={{ user, isLoading, isAuthenticated: !!user, login, register, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user, isLoading, isAuthenticated: !!user, login, register, logout }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

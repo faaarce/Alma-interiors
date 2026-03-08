@@ -26,7 +26,9 @@ export default function LoginPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#1C1C1C]">
-      <div className="pointer-events-none absolute inset-0 opacity-5"><div className="h-full w-full" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, #C5A572 1px, transparent 0)", backgroundSize: "40px 40px" }} /></div>
+      <div className="pointer-events-none absolute inset-0 opacity-5">
+        <div className="h-full w-full" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, #C5A572 1px, transparent 0)", backgroundSize: "40px 40px" }} />
+      </div>
       <div className="pointer-events-none absolute top-20 right-20 h-64 w-64 rounded-full border border-[#C5A572]/5" />
       <div className="pointer-events-none absolute bottom-20 left-16 h-40 w-40 rounded-full border border-[#C5A572]/5" />
       <Link to="/" className="absolute top-8 left-8 z-20 flex items-center gap-2 text-sm text-white/50 transition-colors hover:text-white">

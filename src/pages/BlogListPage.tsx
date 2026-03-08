@@ -9,6 +9,7 @@ export default function BlogListPage() {
   const [blogs, setBlogs] = useState<BlogData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
   const { isAuthenticated } = useAuth();
 
   useEffect(() => {
@@ -18,6 +19,10 @@ export default function BlogListPage() {
     load();
   }, []);
 
+  const filtered = search
+    ? blogs.filter((b) => b.title.toLowerCase().includes(search.toLowerCase()) || b.author.toLowerCase().includes(search.toLowerCase()))
+    : blogs;
+
   function formatDate(ts?: number) {
     if (!ts) return "";
     return new Date(ts).toLocaleDateString("id-ID", { year: "numeric", month: "long", day: "numeric" });
@@ -25,11 +30,12 @@ export default function BlogListPage() {
 
   return (
     <div className="font-sans">
-      <Header navLinks={[{ label: "Works", href: "/work" }, { label: "Blog", href: "/blog" }, { label: "Contact", href: "/#contact" }]} ctaLabel="Book" lightSections={[]} />
+      <Header navLinks={[{ label: "Works", href: "/work" }, { label: "Teams", href: "/teams" }, { label: "Blog", href: "/blog" }, { label: "Contact", href: "/#contact" }]} ctaLabel="Book" lightSections={[]} />
 
       {/* Hero */}
       <section className="relative flex h-[40vh] min-h-[340px] items-center justify-center overflow-hidden bg-[#1C1C1C]">
         <div className="pointer-events-none absolute inset-0 opacity-[0.03]"><div className="h-full w-full" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, #C5A572 1px, transparent 0)", backgroundSize: "32px 32px" }} /></div>
+        <div className="pointer-events-none absolute top-20 right-16 h-64 w-64 rounded-full border border-[#C5A572]/5" />
         <div className="relative z-10 text-center">
           <p className="mb-4 text-sm font-semibold tracking-[0.3em] text-[#C5A572]">BLOG</p>
           <h1 className="mb-6 font-serif text-6xl font-bold text-white md:text-7xl">Articles & Insights</h1>
@@ -44,31 +50,40 @@ export default function BlogListPage() {
       {/* Blog Grid */}
       <section className="bg-white py-24">
         <div className="mx-auto max-w-7xl px-8">
-          <div className="mb-16 flex items-end justify-between">
+          {/* Top bar */}
+          <div className="mb-16 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
               <h2 className="font-serif text-4xl font-bold text-[#3A3A3A]">Latest Posts</h2>
-              <p className="mt-2 text-[#6B6B6B]">{blogs.length} artikel tersedia</p>
+              <p className="mt-2 text-[#6B6B6B]">{filtered.length} artikel {search ? "ditemukan" : "tersedia"}</p>
             </div>
-            {isAuthenticated && (
-              <Link to="/blog/create" className="flex items-center gap-2 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#C5A572] px-6 py-3 text-sm font-medium text-white shadow-lg transition-all duration-300 hover:scale-105">
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path d="M12 4.5v15m7.5-7.5h-15" strokeLinecap="round" /></svg>
-                Tulis Blog
-              </Link>
-            )}
+            <div className="flex items-center gap-4">
+              {/* Search */}
+              <div className="relative">
+                <svg className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-[#6B6B6B]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></svg>
+                <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Cari artikel..." className="rounded-full border border-[#3A3A3A]/10 bg-white py-2.5 pr-4 pl-10 text-sm text-[#3A3A3A] outline-none transition-all focus:border-[#C5A572]/50 focus:ring-2 focus:ring-[#C5A572]/10" />
+              </div>
+              {isAuthenticated && (
+                <Link to="/blog/create" className="flex items-center gap-2 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#C5A572] px-6 py-2.5 text-sm font-medium text-white shadow-lg transition-all duration-300 hover:scale-105">
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path d="M12 4.5v15m7.5-7.5h-15" strokeLinecap="round" /></svg>
+                  Tulis Blog
+                </Link>
+              )}
+            </div>
           </div>
 
           {isLoading && <div className="flex justify-center py-20"><div className="h-8 w-8 animate-spin rounded-full border-2 border-[#C5A572] border-t-transparent" /></div>}
           {error && <p className="py-20 text-center text-[#6B6B6B]">{error}</p>}
-          {!isLoading && !error && blogs.length === 0 && (
+
+          {!isLoading && !error && filtered.length === 0 && (
             <div className="py-20 text-center">
-              <p className="mb-4 text-xl text-[#6B6B6B]">Belum ada blog post.</p>
-              {isAuthenticated && <Link to="/blog/create" className="text-[#C5A572] hover:text-[#D4AF37]">Tulis yang pertama →</Link>}
+              <p className="mb-4 text-xl text-[#6B6B6B]">{search ? "Tidak ada artikel yang cocok." : "Belum ada blog post."}</p>
+              {!search && isAuthenticated && <Link to="/blog/create" className="text-[#C5A572] hover:text-[#D4AF37]">Tulis yang pertama →</Link>}
             </div>
           )}
 
-          {!isLoading && blogs.length > 0 && (
+          {!isLoading && filtered.length > 0 && (
             <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
-              {blogs.map((blog) => (
+              {filtered.map((blog) => (
                 <Link key={blog.objectId} to={`/blog/${blog.objectId}`} className="group cursor-pointer">
                   <div className="mb-5 h-60 overflow-hidden rounded-2xl bg-gray-100">
                     {blog.thumbnail ? (

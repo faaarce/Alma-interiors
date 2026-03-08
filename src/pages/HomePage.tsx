@@ -12,7 +12,12 @@ export default function HomePage() {
   return (
     <div className="font-sans">
       <Header
-        navLinks={[{ label: "Works", href: "/work" }, { label: "Blog", href: "/blog" }, { label: "Contact", href: "/#contact" }]}
+        navLinks={[
+          { label: "Works", href: "/work" },
+          { label: "Teams", href: "/teams" },
+          { label: "Blog", href: "/blog" },
+          { label: "Contact", href: "/#contact" },
+        ]}
         ctaLabel="Book"
         lightSections={["about", "projects", "services", "reviews", "contact"]}
       />
