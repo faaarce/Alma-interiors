@@ -5,6 +5,7 @@ import Process from "../components/Process";
 import Reviews from "../components/Reviews";
 import VideoTestimonial from "../components/VideoTestimonial";
 import Contact from "../components/Contact";
+import Projects from '../components/Projects'
 
 export default function HomePage() {
   return (
