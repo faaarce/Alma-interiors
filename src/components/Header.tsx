@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { WHATSAPP_URL } from "../config/whatsapp";
+import { useAuth } from "../contexts/AuthContext";
 
 interface NavLink {
   label: string;
@@ -57,32 +58,25 @@ export default function Header({
 
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, isAuthenticated, logout } = useAuth();
 
-  /* ── Smooth scroll to section handler ──
-     - Same page + has hash → smooth scroll
-     - Different page + has hash → navigate first, scroll after
-     - No hash (e.g. /work) → normal Link navigation */
   const handleNavClick = useCallback(
     (e: React.MouseEvent, href: string) => {
       setDropdownOpen(false);
 
-      /* Parse the href: "/#about" → pathname="/", hash="about" */
       const [pathname, hash] = href.split("#");
       const targetPath = pathname || "/";
 
-      /* No hash = normal page navigation (e.g. /work) */
-      if (!hash) return; // let <Link> handle it normally
+      if (!hash) return;
 
       e.preventDefault();
 
       if (location.pathname === targetPath) {
-        /* Already on the right page → just scroll */
         const el = document.getElementById(hash);
         if (el) {
           el.scrollIntoView({ behavior: "smooth", block: "start" });
         }
       } else {
-        /* Navigate to page first, then scroll after render */
         navigate(targetPath);
         setTimeout(() => {
           const el = document.getElementById(hash);
@@ -95,7 +89,6 @@ export default function Header({
     [location.pathname, navigate]
   );
 
-  /* ── Scroll-based header hide/show + light/dark ── */
   const updateHeader = useCallback(() => {
     const currentScrollY = window.scrollY;
 
@@ -149,7 +142,6 @@ export default function Header({
     };
   }, [updateHeader]);
 
-  /* ── Handle hash on initial page load / route change ── */
   useEffect(() => {
     const hash = location.hash.replace("#", "");
     if (hash) {
@@ -169,6 +161,12 @@ export default function Header({
 
   const handleDropdownLeave = () => {
     dropdownTimeout.current = setTimeout(() => setDropdownOpen(false), 150);
+  };
+
+  const handleLogout = async () => {
+    setDropdownOpen(false);
+    await logout();
+    navigate("/");
   };
 
   return (
@@ -303,6 +301,34 @@ export default function Header({
                             ))}
                           </div>
                         ))}
+                      </div>
+
+                      {/* ── Auth section in dropdown ── */}
+                      <div className="mt-6 border-t border-gray-100 pt-4">
+                        {isAuthenticated ? (
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-[#6B6B6B]">
+                              Hai, <span className="font-semibold text-[#3A3A3A]">{user?.name}</span>
+                            </span>
+                            <button
+                              onClick={handleLogout}
+                              className="text-xs font-medium text-red-400 transition-colors hover:text-red-500"
+                            >
+                              Logout
+                            </button>
+                          </div>
+                        ) : (
+                          <Link
+                            to="/login"
+                            onClick={() => setDropdownOpen(false)}
+                            className="flex items-center gap-2 text-sm font-medium text-[#C5A572] transition-colors hover:text-[#D4AF37]"
+                          >
+                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                              <path d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            Admin Login
+                          </Link>
+                        )}
                       </div>
                     </div>
                   </div>
