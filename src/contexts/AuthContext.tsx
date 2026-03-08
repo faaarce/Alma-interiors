@@ -1,21 +1,6 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  type ReactNode,
-} from "react";
-import {
-  login as apiLogin,
-  register as apiRegister,
-  logout as apiLogout,
-  getStoredUser,
-  validateToken,
-  type BackendlessUser,
-} from "../lib/backendless";
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
+import { login as apiLogin, register as apiRegister, logout as apiLogout, getStoredUser, validateToken, type BackendlessUser } from "../lib/backendless";
 
-/* ───────── Context Types ───────── */
 interface AuthContextType {
   user: BackendlessUser | null;
   isLoading: boolean;
@@ -27,67 +12,32 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-/* ───────── Provider ───────── */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<BackendlessUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check stored session on mount
   useEffect(() => {
     async function checkAuth() {
       const storedUser = getStoredUser();
-      if (storedUser) {
-        const isValid = await validateToken();
-        if (isValid) {
-          setUser(storedUser);
-        }
-      }
+      if (storedUser) { const valid = await validateToken(); if (valid) setUser(storedUser); }
       setIsLoading(false);
     }
     checkAuth();
   }, []);
 
-  const login = useCallback(async (email: string, password: string) => {
-    const loggedInUser = await apiLogin(email, password);
-    setUser(loggedInUser);
-  }, []);
-
-  const register = useCallback(
-    async (name: string, email: string, password: string) => {
-      await apiRegister(name, email, password);
-      // After register, auto-login
-      const loggedInUser = await apiLogin(email, password);
-      setUser(loggedInUser);
-    },
-    []
-  );
-
-  const logout = useCallback(async () => {
-    await apiLogout();
-    setUser(null);
-  }, []);
+  const login = useCallback(async (email: string, password: string) => { const u = await apiLogin(email, password); setUser(u); }, []);
+  const register = useCallback(async (name: string, email: string, password: string) => { await apiRegister(name, email, password); const u = await apiLogin(email, password); setUser(u); }, []);
+  const logout = useCallback(async () => { await apiLogout(); setUser(null); }, []);
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isLoading,
-        isAuthenticated: !!user,
-        login,
-        register,
-        logout,
-      }}
-    >
+    <AuthContext.Provider value={{ user, isLoading, isAuthenticated: !!user, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-/* ───────── Hook ───────── */
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  return ctx;
 }
