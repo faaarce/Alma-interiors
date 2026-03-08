@@ -27,7 +27,7 @@ export default function HomePage() {
       />
       <About />
       <Projects />
-      <Services />
+
       <Process />
       <Reviews />
       <VideoTestimonial />

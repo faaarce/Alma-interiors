@@ -41,7 +41,7 @@ export default function Reviews({
   sectionLabel = "REVIEWS",
   heading = "Customer Reviews",
   reviews = defaultReviews,
-  sideImage = "/images/project1.jpg",
+  sideImage = "/images/apartment.jpeg",
 }: ReviewsProps) {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState<"left" | "right">("left");
@@ -49,15 +49,12 @@ export default function Reviews({
   const sectionRef = useRef<HTMLElement>(null);
   const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // ─── Navigate to a review ───
   const goTo = useCallback(
     (newIndex: number, dir: "left" | "right") => {
       if (isAnimating || newIndex === current) return;
       setIsAnimating(true);
       setDirection(dir);
       setCurrent(newIndex);
-
-      // Unlock after animation (600ms matches CSS transition)
       setTimeout(() => setIsAnimating(false), 600);
     },
     [isAnimating, current]
@@ -73,17 +70,14 @@ export default function Reviews({
     goTo(prev, "right");
   }, [current, reviews.length, goTo]);
 
-  // ─── Auto-play: start when section visible, stop when not ───
   useEffect(() => {
     if (!sectionRef.current) return;
-
     const sectionEl = sectionRef.current;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           autoPlayRef.current = setInterval(() => {
-            // Pake functional setState biar selalu dapet current terbaru
             setCurrent((prev) => {
               const next = (prev + 1) % reviews.length;
               setDirection("left");
@@ -110,7 +104,6 @@ export default function Reviews({
     };
   }, [reviews.length]);
 
-  // ─── Scroll reveal observer ───
   const setupReveal = useCallback(() => {
     if (!sectionRef.current) return;
 
@@ -145,10 +138,8 @@ export default function Reviews({
     >
       <div className="mx-auto max-w-7xl px-8">
         <div className="grid grid-cols-1 items-center gap-16 md:grid-cols-2">
-
           {/* ═══ Left Side — Quotes ═══ */}
           <div>
-            {/* Heading */}
             <div className="rev-reveal">
               <p className="mb-4 text-sm font-semibold tracking-wider text-[#C5A572]">
                 {sectionLabel}
@@ -158,14 +149,10 @@ export default function Reviews({
               </h2>
             </div>
 
-            {/* Quote area */}
             <div className="rev-reveal mb-8" style={{ transitionDelay: "0.2s" }}>
-              {/* Big floating quote mark */}
               <div className="rev-quote-mark -mb-16 select-none font-serif text-[120px] leading-none text-[#C5A572]/20">
                 "
               </div>
-
-              {/* Review container (fixed height, slides swap) */}
               <div className="relative min-h-[280px] overflow-hidden">
                 {reviews.map((review, i) => (
                   <ReviewSlide
@@ -178,12 +165,10 @@ export default function Reviews({
               </div>
             </div>
 
-            {/* Navigation + dots */}
             <div
               className="rev-reveal flex items-center space-x-4"
               style={{ transitionDelay: "0.4s" }}
             >
-              {/* Prev button */}
               <button
                 onClick={goPrev}
                 aria-label="Previous review"
@@ -200,23 +185,19 @@ export default function Reviews({
                 </svg>
               </button>
 
-              {/* Progress dots */}
               <div className="flex items-center space-x-2">
                 {reviews.map((_, i) => (
                   <div
                     key={i}
-                    className={`
-                      h-2 rounded-full transition-all duration-500
-                      ${i === current
+                    className={`h-2 rounded-full transition-all duration-500 ${
+                      i === current
                         ? "w-6 bg-[#C5A572]"
                         : "w-2 bg-[#3A3A3A]/20"
-                      }
-                    `}
+                    }`}
                   />
                 ))}
               </div>
 
-              {/* Next button */}
               <button
                 onClick={goNext}
                 aria-label="Next review"
@@ -240,7 +221,6 @@ export default function Reviews({
             className="rev-reveal relative"
             style={{ transitionDelay: "0.3s" }}
           >
-            {/* Main image */}
             <div className="rev-image-clip overflow-hidden rounded-2xl shadow-2xl">
               <img
                 src={sideImage}
@@ -249,19 +229,13 @@ export default function Reviews({
                 loading="lazy"
               />
             </div>
-
-            {/* Gold frame accent (offset) */}
             <div className="rev-frame pointer-events-none absolute -top-4 -right-4 h-full w-full rounded-2xl border-2 border-[#C5A572]/20" />
-
-            {/* Glow blobs */}
             <div className="absolute -top-6 -right-6 h-32 w-32 rounded-full bg-[#D4AF37] opacity-10 blur-3xl" />
             <div className="absolute -bottom-6 -left-6 h-40 w-40 rounded-full bg-[#C5A572] opacity-10 blur-3xl" />
           </div>
-
         </div>
       </div>
 
-      {/* Decorative spinning star */}
       <div className="rev-star absolute top-20 left-20 h-12 w-12 opacity-10">
         <svg
           viewBox="0 0 24 24"
@@ -283,7 +257,6 @@ interface ReviewSlideProps {
 }
 
 function ReviewSlide({ review, isActive, direction }: ReviewSlideProps) {
-  // Tentukan transform berdasarkan active state + direction
   let transform = "";
   let opacity = "";
   let pointerEvents = "";
@@ -293,7 +266,6 @@ function ReviewSlide({ review, isActive, direction }: ReviewSlideProps) {
     opacity = "1";
     pointerEvents = "auto";
   } else {
-    // Slide yang NGGAK aktif: posisi tergantung arah animasi terakhir
     transform = direction === "left" ? "translateX(-80px)" : "translateX(80px)";
     opacity = "0";
     pointerEvents = "none";
