@@ -13,6 +13,7 @@ import { SecretPage, KeyboardEgg } from "./EasterEgg";
 export default function App() {
   return (
     <BrowserRouter>
+     <KeyboardEgg />
       <AuthProvider>
         <Routes>
           <Route path="/" element={<HomePage />} />
